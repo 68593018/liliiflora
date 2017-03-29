@@ -24,5 +24,4 @@ This is [opendaylight wiki](https://wiki.opendaylight.org/view/OpenDaylight_Cont
 **NormalizedNode内容完全根据Yang定义生成, 可以与XML及其JSON进行无缝转换, 如果要转换成其它自定义格式，需要实现NormalizedNodeStreamWriter接口**  
 *例如JSONNormalizedNodeStreamWriter则实现了转换为JSON， XMLStreamNormalizedNodeStreamWriter则实现了转换为XML*  
 
-YangTools整体实现相对比较复杂，JSON转换参见 [JSON To NormalizedNode](https://github.com/opendaylight/yangtools/tree/master/yang/yang-data-codec-gson)  
-XML转换参见[XML To NormalizedNode](https://github.com/opendaylight/yangtools/tree/master/yang/yang-data-codec-xml)
+YangTools整体实现相对比较复杂，JSON转换参见 [JSON To NormalizedNode](https://github.com/opendaylight/yangtools/tree/master/yang/yang-data-codec-gson)  XML转换参见[XML To NormalizedNode](https://github.com/opendaylight/yangtools/tree/master/yang/yang-data-codec-xml)
