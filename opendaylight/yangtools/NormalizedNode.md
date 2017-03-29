@@ -1,15 +1,23 @@
 # NormalizedNode
 
-This is [opendaylight wiki](https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Design:Normalized_DOM_Model) about NormalizedNode
+## Yang Language
 
-| YANG concept              | schema            |type              | Description        |
-|---------------------------|-------------------|------------------|--------------------|
-| container                 |ContainerNode      |DataContainerNode |                    |
-| leaf  |                       | Counter ||
-| leaf-list |       | Gauge   ||
-| list    |         | Gauge   ||
-| choice          |             | Gauge   ||
-| case    |              | Counter ||
-| augment    |              | Counter |||
-| notification    |              | Counter ||
- 
+This is [RFC6020](https://tools.ietf.org/html/rfc6020) about Yang - A Data Modeling Language
+
+## Normalized DOM Model
+
+This is [opendaylight wiki](https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Design:Normalized_DOM_Model) about NormalizedNode Dom Model
+
+
+| YANG concept    | schema              |type                 | Description                         |
+|-----------------|---------------------|---------------------|-------------------------------------|
+| container       |ContainerNode        |a leaf               |容器节点,内容为DataContainerChild集合  |
+| leaf            |LeafNode             |a leaf               |单个叶子节点                          |
+| leaf-list       |LeafSetNode          |Special node         |多个叶子节点                          |
+|                 |LeafSetEntryNode     |a leaf               |List实例                             |
+| list            |MapNode              |Special node         |List内部元素为MapEntryNode            |
+| list            |UnkeyedListNode      |Special node         |List内部元素为UnkeyedListEntryNode    |
+|                 |MapEntryNode         |a leaf               |List实例                             |
+|                 |UnkeyedListEntryNode |a leaf               |List实例                             |
+| choice          |ChoiceNode           |a leaf               ||
+
