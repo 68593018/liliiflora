@@ -21,5 +21,5 @@ This is [opendaylight wiki](https://wiki.opendaylight.org/view/OpenDaylight_Cont
 |                 |UnkeyedListEntryNode |a leaf               |List实例                             |
 | choice          |ChoiceNode           |a leaf               ||
 
-**NormalizedNode内容完全根据Yang定义生成, 可以与XML及其JSON进行无缝转换, 如果要转换成其它自定义格式，需要实现NormalizedNodeStreamWriter接口**，
-*例如JSONNormalizedNodeStreamWriter则实现了转换为Json*
+**NormalizedNode内容完全根据Yang定义生成, 可以与XML及其JSON进行无缝转换, 如果要转换成其它自定义格式，需要实现NormalizedNodeStreamWriter接口**  
+*例如JSONNormalizedNodeStreamWriter则实现了转换为JSON， XMLStreamNormalizedNodeStreamWriter则实现了转换为XML*
