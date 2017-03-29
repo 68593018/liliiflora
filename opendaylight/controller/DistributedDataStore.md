@@ -6,8 +6,7 @@
 
 ## DataSto简介
 
-ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据自己的需要替换为自己的数据库插件，Controller项目的DataStore插件有以下两种  
+ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据需要替换为自己的数据库插件，社区Controller项目的DataStore插件有以下两种实现方式  
 
-+ DistributedDataStore
-
-+ InMemoryDOMDataStore
++ DistributedDataStore - 集群环境下建议荐数据库
++ InMemoryDOMDataStore - 单节点环境下建议数据库
