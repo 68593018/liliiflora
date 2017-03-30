@@ -20,6 +20,10 @@ ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据需要
 
 + 支持事务链，事务链实际是将多个单独事务封装成一个事务进行处理，主要用于提高性能
 
+## BindingDOMDataBrokerAdapter
+
+![BindingDOMDataBrokerAdapter](BindingDOMDataBrokerAdapter.png)
+
 ## InMemoryDOMDataStore
 
 
