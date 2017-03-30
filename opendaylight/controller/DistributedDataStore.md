@@ -22,6 +22,7 @@ ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据需要
 
 ## BindingDOMDataBrokerAdapter
 
+业务看到的只是BindingDOMDataBrokerAdapter, 具体的DOMDataBroker实现适配进BindingDOMDataBrokerAdapter
 ![BindingDOMDataBrokerAdapter](BindingDOMDataBrokerAdapter.png)
 
 ### SerializedDOMDataBroker
@@ -29,8 +30,12 @@ ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据需要
 SerializedDOMDataBroker适配到BindingDOMDataBrokerAdapter  
 ![SerializedDOMDataBroker适配到BindingDOMDataBrokerAdapter](BindingDOMDataBrokerAdapter(SerializedDOMDataBroker).png)
 
-InMemoryDOMDataStore适配到SerializedDOMDataBroker  
+InMemoryDOMDataStore适配到SerializedDOMDataBroker
 ![InMemoryDOMDataStore适配到SerializedDOMDataBroker](SerializedDOMDataBroker.png)
+
+dataBroker.newWriteOnlyTransaction()
+
+### ConcurrentDOMDataBroker
 
 ## InMemoryDOMDataStore
 
