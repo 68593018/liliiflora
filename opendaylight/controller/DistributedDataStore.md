@@ -50,16 +50,16 @@ ConcurrentDOMDataBroker适配到BindingDOMDataBrokerAdapter
 DistributedDataStore适配到ConcurrentDOMDataBroker
 ![DistributedDataStore适配到ConcurrentDOMDataBroker](ConcurrentDOMDataBroker.png)
 
-创建写事务 dataBroker.newWriteOnlyTransaction()
+创建写事务 dataBroker.newWriteOnlyTransaction(), 注意这里的写事务并没有到DistributedDataStore中创建真正的写事务
 ![dataBroker.newWriteOnlyTransaction](ConcurrentDOMDataBroker(newWriteOnlyTransaction).png)
 
-创建读事务 dataBroker.newReadOnlyTransaction()
+创建读事务 dataBroker.newReadOnlyTransaction(), 注意这里的读事务并没有到DistributedDataStore中创建真正的读事务
 ![dataBroker.newWriteOnlyTransaction](ConcurrentDOMDataBroker(newReadOnlyTransaction).png)
 
-PUT操作
-![tx.put](ConcurrentDOMDataBroker(tx.write).png)
+WRITE操作，实际执行Write操作的时候才会在DistributedDataStore中创建真正的写事务, 写事务通过限速进行限制
+![tx.write](ConcurrentDOMDataBroker(tx.write).png)
 
-READ操作
+READ操作，实际执行Read操作的时候才会在DistributedDataStore中创建真正的读事务
 ![tx.read](ConcurrentDOMDataBroker(tx.read).png)
 
 ## InMemoryDOMDataStore
