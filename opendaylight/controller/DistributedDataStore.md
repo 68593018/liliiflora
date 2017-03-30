@@ -57,7 +57,7 @@ DistributedDataStore适配到ConcurrentDOMDataBroker
 ![dataBroker.newWriteOnlyTransaction](ConcurrentDOMDataBroker(newReadOnlyTransaction).png)
 
 WRITE操作，实际执行Write操作的时候才会在DistributedDataStore中创建真正的写事务, 写事务通过限速进行限制
-![tx.write](ConcurrentDOMDataBroker(tx.write).png)
+![tx.write](ConcurrentDOMDataBroker(tx.put).png)
 
 READ操作，实际执行Read操作的时候才会在DistributedDataStore中创建真正的读事务
 ![tx.read](ConcurrentDOMDataBroker(tx.read).png)
