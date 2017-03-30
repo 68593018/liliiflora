@@ -56,6 +56,12 @@ DistributedDataStore适配到ConcurrentDOMDataBroker
 创建读事务 dataBroker.newReadOnlyTransaction()
 ![dataBroker.newWriteOnlyTransaction](ConcurrentDOMDataBroker(newReadOnlyTransaction).png)
 
+PUT操作
+![tx.put](ConcurrentDOMDataBroker(tx.write).png)
+
+READ操作
+![tx.read](ConcurrentDOMDataBroker(tx.read).png)
+
 ## InMemoryDOMDataStore
 
 
