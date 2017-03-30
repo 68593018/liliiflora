@@ -34,6 +34,7 @@ InMemoryDOMDataStore适配到SerializedDOMDataBroker
 ![InMemoryDOMDataStore适配到SerializedDOMDataBroker](SerializedDOMDataBroker.png)
 
 dataBroker.newWriteOnlyTransaction()
+![dataBroker.newWriteOnlyTransaction](SerializedDOMDataBroker(newWriteOnlyTransaction).png)
 
 ### ConcurrentDOMDataBroker
 
