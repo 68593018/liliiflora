@@ -33,8 +33,11 @@ SerializedDOMDataBroker适配到BindingDOMDataBrokerAdapter
 InMemoryDOMDataStore适配到SerializedDOMDataBroker
 ![InMemoryDOMDataStore适配到SerializedDOMDataBroker](SerializedDOMDataBroker.png)
 
-dataBroker.newWriteOnlyTransaction()
+创建写事务 dataBroker.newWriteOnlyTransaction()
 ![dataBroker.newWriteOnlyTransaction](SerializedDOMDataBroker(newWriteOnlyTransaction).png)
+
+创建读事务 dataBroker.newReadOnlyTransaction()
+![dataBroker.newWriteOnlyTransaction](SerializedDOMDataBroker(newReadOnlyTransaction).png)
 
 ### ConcurrentDOMDataBroker
 
