@@ -25,6 +25,9 @@ ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据需要
 业务看到的只是BindingDOMDataBrokerAdapter, 具体的DOMDataBroker实现适配进BindingDOMDataBrokerAdapter
 ![BindingDOMDataBrokerAdapter](BindingDOMDataBrokerAdapter.png)
 
+BindingToNormalizedNodeCodec用于BA到BI，即将业务数据NormalizedNode化处理  
+DOMDataBroker及其DataTreeChangeService需要适配具体的实现，下面分析DOMDataBroker实现
+
 ### SerializedDOMDataBroker
 
 SerializedDOMDataBroker适配到BindingDOMDataBrokerAdapter  
