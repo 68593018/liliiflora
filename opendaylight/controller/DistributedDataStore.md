@@ -44,6 +44,18 @@ InMemoryDOMDataStore适配到SerializedDOMDataBroker
 
 ### ConcurrentDOMDataBroker
 
+ConcurrentDOMDataBroker适配到BindingDOMDataBrokerAdapter  
+![ConcurrentDOMDataBroker适配到BindingDOMDataBrokerAdapter](BindingDOMDataBrokerAdapter(ConcurrentDOMDataBroker).png)
+
+DistributedDataStore适配到ConcurrentDOMDataBroker
+![DistributedDataStore适配到ConcurrentDOMDataBroker](ConcurrentDOMDataBroker.png)
+
+创建写事务 dataBroker.newWriteOnlyTransaction()
+![dataBroker.newWriteOnlyTransaction](ConcurrentDOMDataBroker(newWriteOnlyTransaction).png)
+
+创建读事务 dataBroker.newReadOnlyTransaction()
+![dataBroker.newWriteOnlyTransaction](ConcurrentDOMDataBroker(newReadOnlyTransaction).png)
+
 ## InMemoryDOMDataStore
 
 
