@@ -75,7 +75,7 @@ READ操作，实际执行Read操作的时候才会在DistributedDataStore中创�
 ## PingPongDataBroker
 
 DOM方式的DataBroker
-
+![PingPongDataBroker](PingPongDataBroker.png)
 
 ## InMemoryDOMDataStore
 
