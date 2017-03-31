@@ -20,11 +20,11 @@ ODL的DataStore设计为插件方式集成到MDSAL中，用户可以根据需要
 
 + 支持事务链，事务链实际是将多个单独事务封装成一个事务进行处理，主要用于提高性能  
 
-DataBroker区分BA及其BI，也就是Binding及其DOM
+DataBroker区分BA及其BI，也就是Binding及其DOM, 业务看到的仅仅是DataBroker，DataBroker后面的具体数据库是不感知的
 
-+ Binding  BindingDOMDataBrokerAdapter 
++ Binding - BindingDOMDataBrokerAdapter 
 
-+ DOM PingPongDataBroker  
++ DOM - PingPongDataBroker  
 
 本文主要分析DataStore适配的各个组件之间的关联关系，不会过多涉及DataStore内部具体实现方式，仅作为数据库替换的前期分析工作
 
