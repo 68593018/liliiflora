@@ -32,7 +32,7 @@ DataBroker区分BA及其BI，也就是Binding及其DOM, 业务看到的仅仅是
 
 ## BindingDOMDataBrokerAdapter
 
-业务看到的只是BindingDOMDataBrokerAdapter, 具体的DOMDataBroker实现适配进BindingDOMDataBrokerAdapter
+BA方式的DataBroker, 具体的DOMDataBroker实现适配进BindingDOMDataBrokerAdapter
 ![BindingDOMDataBrokerAdapter](BindingDOMDataBrokerAdapter.png)
 
 BindingToNormalizedNodeCodec用于BA到BI，即将业务数据NormalizedNode化处理  
