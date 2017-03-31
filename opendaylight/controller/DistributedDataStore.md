@@ -72,6 +72,11 @@ WRITE操作，实际执行Write操作的时候才会在DistributedDataStore中�
 READ操作，实际执行Read操作的时候才会在DistributedDataStore中创建真正的读事务
 ![tx.read](ConcurrentDOMDataBroker(tx.read).png)
 
+## PingPongDataBroker
+
+DOM方式的DataBroker
+
+
 ## InMemoryDOMDataStore
 
 
