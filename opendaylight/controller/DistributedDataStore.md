@@ -74,7 +74,8 @@ READ操作，实际执行Read操作的时候才会在DistributedDataStore中创�
 
 ## PingPongDataBroker
 
-DOM方式的DataBroker
+DOM方式的DataBroker和BA的方式基本是一致的，但是PUT的内容即NormalizedNode结构，所以不需要BindingToNormalizedNodeCodec的转换
+
 ![PingPongDataBroker](PingPongDataBroker.png)
 
 ## InMemoryDOMDataStore
