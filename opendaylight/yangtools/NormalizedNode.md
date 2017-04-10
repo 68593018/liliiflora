@@ -29,5 +29,5 @@ YangTools整体实现相对比较复杂，JSON转换参见 [JSON To NormalizedNo
 ## NormalizedNode遍历
 ODL的社区提供了相应的遍历类及其业务需要实现的接口
 
-NormalizedNodeNavigator
-NormalizedNodeVisitor  
+- NormalizedNodeNavigator - ODL提供的遍历类
+- NormalizedNodeVisitor - 业务需要实现的遍历接口
