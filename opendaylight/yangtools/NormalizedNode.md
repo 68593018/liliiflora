@@ -25,3 +25,9 @@ This is [opendaylight wiki](https://wiki.opendaylight.org/view/OpenDaylight_Cont
 *例如JSONNormalizedNodeStreamWriter则实现了转换为JSON， XMLStreamNormalizedNodeStreamWriter则实现了转换为XML*  
 
 YangTools整体实现相对比较复杂，JSON转换参见 [JSON To NormalizedNode](https://github.com/opendaylight/yangtools/tree/master/yang/yang-data-codec-gson)  XML转换参见[XML To NormalizedNode](https://github.com/opendaylight/yangtools/tree/master/yang/yang-data-codec-xml)
+
+## NormalizedNode遍历
+ODL的社区提供了相应的遍历类及其业务需要实现的接口
+
+NormalizedNodeNavigator
+NormalizedNodeVisitor  
