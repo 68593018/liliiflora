@@ -20,7 +20,7 @@ Go语言的工具安装请参见官方文档[Go install](https://golang.org/doc/
 
 ## etcdv3交互方式
 
-`
+```
 [root@localhost bin]# ./etcdctl put a 1
 No help topic for 'put'
 [root@localhost bin]# export ETCDCTL_API=3
@@ -44,4 +44,4 @@ OK
 {"header":{"cluster_id":17237436991929493444,"member_id":9372538179322589801,"revision":12,"raft_term":2},"kvs":[{"key":"YQ==","create_revision":11,"mod_revision":12,"version":2,"value":"NQ=="}],"count":1}
 [root@localhost bin]# ./etcdctl get --help
 
-`
+```
