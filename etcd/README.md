@@ -17,3 +17,31 @@ Go语言的工具安装请参见官方文档[Go install](https://golang.org/doc/
 [downloading and building](https://github.com/coreos/etcd/blob/master/Documentation/dl_build.md)
 
 本地集群启动 [Setting up local clusters](https://github.com/coreos/etcd/blob/master/Documentation/dev-guide/local_cluster.md)
+
+## etcdv3交互方式
+
+`
+[root@localhost bin]# ./etcdctl put a 1
+No help topic for 'put'
+[root@localhost bin]# export ETCDCTL_API=3
+[root@localhost bin]# ./etcdctl put a 1   
+OK
+[root@localhost bin]# ./etcdctl put a 2
+OK
+[root@localhost bin]# ./etcdctl put a 3
+OK
+[root@localhost bin]# ./etcdctl get a -w=json
+{"header":{"cluster_id":17237436991929493444,"member_id":9372538179322589801,"revision":9,"raft_term":2},"kvs":[{"key":"YQ==","create_revision":7,"mod_revision":9,"version":3,"value":"Mw=="}],"count":1}
+[root@localhost bin]# ./etcdctl del a
+1
+[root@localhost bin]# ./etcdctl put a 4
+OK
+[root@localhost bin]# ./etcdctl get a -w=json
+{"header":{"cluster_id":17237436991929493444,"member_id":9372538179322589801,"revision":11,"raft_term":2},"kvs":[{"key":"YQ==","create_revision":11,"mod_revision":11,"version":1,"value":"NA=="}],"count":1}
+[root@localhost bin]# ./etcdctl put a 5
+OK
+[root@localhost bin]# ./etcdctl get a -w=json
+{"header":{"cluster_id":17237436991929493444,"member_id":9372538179322589801,"revision":12,"raft_term":2},"kvs":[{"key":"YQ==","create_revision":11,"mod_revision":12,"version":2,"value":"NQ=="}],"count":1}
+[root@localhost bin]# ./etcdctl get --help
+
+`
