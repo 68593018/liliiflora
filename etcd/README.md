@@ -10,3 +10,8 @@ Go语言的工具安装请参见官方文档[Go install](https://golang.org/doc/
 
 + GOROOT - Go工具的安装路径
 + GOPATH - Go的workspace，go语言与github结合比较紧密，利用go命令可以直接从github上下载代码到该目录, 并且自动编译安装，具体可参见[Go write code](https://golang.org/doc/code.html). 务必仔细阅读
+
+## etcdv3安装
+
+社区提供了三种安装方式，其中第一种不需要Go环境，另外两种都需要，但是仍然建议设置go环境，因为后续的很多工作都需要依赖go，具体安装方式参见社区文档
+[downloading and building](https://github.com/coreos/etcd/blob/master/Documentation/dl_build.md)
