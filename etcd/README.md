@@ -15,3 +15,5 @@ Go语言的工具安装请参见官方文档[Go install](https://golang.org/doc/
 
 社区提供了三种安装方式，其中第一种不需要Go环境，另外两种都需要，但是仍然建议设置go环境，因为后续的很多工作都需要依赖go，具体安装方式参见社区文档
 [downloading and building](https://github.com/coreos/etcd/blob/master/Documentation/dl_build.md)
+
+本地集群启动 [Setting up local clusters](https://github.com/coreos/etcd/blob/master/Documentation/dev-guide/local_cluster.md)
