@@ -20,6 +20,8 @@ Go语言的工具安装请参见官方文档[Go install](https://golang.org/doc/
 
 ## etcdv3交互方式
 
+### k/v的版本变化
+
 ```
 [root@localhost bin]# ./etcdctl put a 1
 No help topic for 'put'
