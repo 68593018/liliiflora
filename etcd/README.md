@@ -22,6 +22,13 @@ Go语言的工具安装请参见官方文档[Go install](https://golang.org/doc/
 
 ### k/v的版本变化
 
+版本号分为两大类，全局版本及其K/V存储对象的版本. 版本号是读取历史数据的基础，实现读事务隔离的方法
+
++ revision - 全局版本号，每次有数据变化都会++
++ create_revision - 第一次创建该K/V存储对象的全局版本号
++ mod_revision - 最近一次修改该K/V存储对象的全局版本号
++ version - K/V存储对象自身的版本号，第一次创建的时候由1开始，删除后再重新创建仍然从1开始
+
 ```
 [root@localhost bin]# ./etcdctl put a 1
 No help topic for 'put'
