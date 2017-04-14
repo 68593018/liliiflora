@@ -1,2 +1,4 @@
 # SchemaContext
 
+SchemaContext是根据yang文件定义生成的框架，类似于工程建筑搭建的钢结构框架是根据设计图纸而来的一样
+
