@@ -96,23 +96,19 @@
 ```
 
 ```
-[root@localhost bin]# ./etcdctl get --prefix t
+[root@localhost bin]# ./etcdctl get --prefix test-exec                                
 test-exec/outer-list/0/id
 0
-test-exec/outer-list/0/inner-list/0
+test-exec/outer-list/0/inner-list/0/name
+0
+test-exec/outer-list/0/inner-list/0/value
 Item-0-0
-test-exec/outer-list/0/inner-list/1
+test-exec/outer-list/0/inner-list/1/name
+1
+test-exec/outer-list/0/inner-list/1/value
 Item-0-1
-test-exec/outer-list/0/inner-list/2
+test-exec/outer-list/0/inner-list/2/name
+2
+test-exec/outer-list/0/inner-list/2/value
 Item-0-2
-test-exec/outer-list/3/id
-3
-test-exec/outer-list/3/inner-list/0
-Item-3-0
-test-exec/outer-list/3/inner-list/1
-Item-3-1
-test-exec/outer-list/3/inner-list/2
-Item-3-2
-[root@localhost bin]# 
-[root@localhost bin]# 
 ```
