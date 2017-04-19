@@ -6,4 +6,4 @@ Yang文件定义的所有内容经过解析后会生成相应的SchemaContext, S
 
 | schema          | impl                             |type                 | Description                         |
 |-----------------|----------------------------------|---------------------|-------------------------------------|
-| container       |LeafEffectiveStatementImpl        |a leaf               |                                     |
+| LeafSchemaNode  |LeafEffectiveStatementImpl        |a leaf               |                                     |
