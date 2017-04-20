@@ -29,7 +29,8 @@ YangTools整体实现相对比较复杂，JSON转换参见 [JSON To NormalizedNo
 | NormalizedNode     | build                             |type                 | Description                  |
 |--------------------|-----------------------------------|---------------------|------------------------------|
 | LeafNode           |ImmutableLeafNodeBuilder           |a leaf               |                              |
-| LeafSetEntryNode   |ImmutableLeafSetEntryNodeBuilder   |leaf-list instance   |NodeWithValue作为Identifier包含值          |
+| LeafSetEntryNode   |ImmutableLeafSetEntryNodeBuilder   |leaf-list instance   |NodeWithValue作为Identifier
+                                                                                包含值          |
 | MapNode            |ImmutableMapNodeBuilder            |list                 |                              |
 | LeafSetNode        |ImmutableLeafSetNodeBuilder        |leaf-list            |                              |
 
