@@ -38,3 +38,7 @@ ODL的社区提供了相应的遍历类及其业务需要实现的接口
 
 - NormalizedNodeNavigator - ODL提供的遍历类
 - NormalizedNodeVisitor - 业务需要实现的遍历接口
+
+## 根据Yang的SchemaContext构建NormalizedNode
+
+BuilderTest.java构建NormalizedNode
