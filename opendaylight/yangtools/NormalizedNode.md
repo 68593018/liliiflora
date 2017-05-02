@@ -43,7 +43,7 @@ BuilderTest.java构建NormalizedNode
 | NormalizedNode     | build                             |type                 | Description                  |
 |--------------------|-----------------------------------|---------------------|------------------------------|
 | LeafNode           |ImmutableLeafNodeBuilder           |a leaf               |                              |
+| LeafSetNode        |ImmutableLeafSetNodeBuilder        |leaf-list            |                              |
 | LeafSetEntryNode   |ImmutableLeafSetEntryNodeBuilder   |leaf-list instance   |NodeWithValue作为Identifier   |
 | MapNode            |ImmutableMapNodeBuilder            |list                 |                              |
-| LeafSetNode        |ImmutableLeafSetNodeBuilder        |leaf-list            |                              |
-
+| MapEntryNode       |ImmutableMapEntryNodeBuilder       |list instance        |NodeIdentifierWithPredicates作为Identifier |
