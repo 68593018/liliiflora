@@ -7,3 +7,4 @@
 + http://www.antlr.org/
 + IBM开发库: https://www.ibm.com/developerworks/cn/topics/
 + SPI(ServiceLoader) http://aries.apache.org/modules/spi-fly.html
++ org.eclipse.osgi http://grepcode.com/snapshot/repository.grepcode.com/java/eclipse.org/4.2.2/org.eclipse/osgi/3.8.2
