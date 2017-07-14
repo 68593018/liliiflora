@@ -8,4 +8,4 @@
 + IBM开发库: https://www.ibm.com/developerworks/cn/topics/
 + SPI(ServiceLoader) http://aries.apache.org/modules/spi-fly.html
 + org.eclipse.osgi http://grepcode.com/snapshot/repository.grepcode.com/java/eclipse.org/4.2.2/org.eclipse/osgi/3.8.2
-+ Java的Job调度器：http://www.quartz-scheduler.org/，使用 http://www.cronmaker.com/ 支持丰富的调度方式
++ Java的Job调度器：http://www.quartz-scheduler.org 使用http://www.cronmaker.com/ 支持丰富的调度方式
