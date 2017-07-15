@@ -11,4 +11,6 @@
 + Java的Job调度器：http://www.quartz-scheduler.org 使用http://www.cronmaker.com/ 支持丰富的调度方式
 + Java的微服务框架: http://bootique.io/ 使用 google的guice实现非容器的平台框架
 + Finance数据库: http://kairosdb.github.io/
++ NoSql数据库: http://cassandra.apache.org/
+
 
