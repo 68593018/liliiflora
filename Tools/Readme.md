@@ -12,5 +12,6 @@
 + Java的微服务框架: http://bootique.io/ 使用 google的guice实现非容器的平台框架
 + Finance数据库: http://kairosdb.github.io/
 + NoSql数据库: http://cassandra.apache.org/
++ 缓存: http://www.ehcache.org/
 
 
