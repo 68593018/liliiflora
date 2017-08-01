@@ -18,5 +18,6 @@
 + 开源的GIS软件清单: http://www.cnblogs.com/wicked-fly/p/5558279.html
 + 地图资源: http://www.naturalearthdata.com/downloads/10m-cultural-vectors/
 + eugenp: https://github.com/eugenp
++ 开源GIS地图库: Leaflet/Modest Maps/Polymaps 
 
 
