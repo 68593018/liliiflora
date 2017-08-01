@@ -16,5 +16,7 @@
 + 缓存: http://www.ehcache.org/
 + 数据可视化神器: https://d3js.org/
 + 开源的GIS软件清单: http://www.cnblogs.com/wicked-fly/p/5558279.html
++ 地图资源: http://www.naturalearthdata.com/downloads/10m-cultural-vectors/
+
 
 
