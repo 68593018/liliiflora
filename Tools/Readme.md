@@ -24,7 +24,7 @@
 + 在线前端开发平台 Plunker : http://plnkr.co/
 + REST-API : https://swagger.io/
 + JavaScript UI:
-https://vmware.github.io/clarity/
-http://www.jqwidgets.com/angular/  商业软件
-http://www.telerik.com/kendo-angular-ui/ 商业软件
-https://www.primefaces.org/primeng/#/ 
+    - https://vmware.github.io/clarity/  
+    - http://www.jqwidgets.com/angular/  商业软件  
+    - http://www.telerik.com/kendo-angular-ui/ 商业软件  
+    - https://www.primefaces.org/primeng/#/   
