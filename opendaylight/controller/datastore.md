@@ -9,5 +9,8 @@ MD-SAL的全称是Model-driven Service Abstraction Layer，即模型驱动-服�
 数据变化通告，RPC及其Notification等功能，从而在仅仅基于各个模块提供的Yang文件，不需要了解各个模块内部接口及其实现细节的情况下，实现模块间的
 消息通信及其数据交互.
 
+下面将解析如何将Yang文件定义的数据格式内容进行存储的
 
+## Yang模型介绍
 
+Yang模型仅仅提供了理论基础，具体将理论转换为实现则是YangTools项目完成的, 
