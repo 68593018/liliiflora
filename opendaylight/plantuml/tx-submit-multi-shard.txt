@@ -1,0 +1,85 @@
+@startuml
+
+box "Distribute DataStore" #DeepSkyBlue
+    participant DOMBrokerWriteOnlyTransaction
+    participant ConcurrentDOMDataBroker
+    participant ThreePhaseCommitCohortProxy
+end box
+
+box "Akka System" #LightBlue
+    participant Shard
+end box
+
+DOMBrokerWriteOnlyTransaction -> ConcurrentDOMDataBroker: submit(tx, cohorts)
+
+loop 多个shard的cohort
+
+group doCanCommit
+
+ConcurrentDOMDataBroker -> ThreePhaseCommitCohortProxy: canCommit()
+
+note over Shard
+    多shard情况下shard内部处理ReadyLocalTransaction后不立即触发三阶段提交
+    等待业务submit流程触发
+end note
+
+Shard --> ThreePhaseCommitCohortProxy: ReadyLocalTransaction结果异步返回
+
+group finishCanCommit
+
+ThreePhaseCommitCohortProxy -> Shard: tell CanCommitTransaction消息
+
+Shard --> ThreePhaseCommitCohortProxy: 返回CanCommitTransactionReply
+
+end
+
+end
+
+ThreePhaseCommitCohortProxy -> ConcurrentDOMDataBroker: 触发下一个cohort的canCommit
+
+end
+
+loop 多个shard的cohort
+
+group doPreCommit
+
+ConcurrentDOMDataBroker -> ThreePhaseCommitCohortProxy: preCommit()
+
+note over ThreePhaseCommitCohortProxy
+    preCommit直接返回成功, 最终由commit操作里面执行preCommit
+end note
+
+ThreePhaseCommitCohortProxy -> ConcurrentDOMDataBroker: return success
+
+end
+
+ThreePhaseCommitCohortProxy -> ConcurrentDOMDataBroker: 触发下一个cohort的preCommit
+
+end
+
+loop 多个shard的cohort
+
+group doCommit
+
+ConcurrentDOMDataBroker -> ThreePhaseCommitCohortProxy: commit()
+
+ThreePhaseCommitCohortProxy -> Shard: tell CommitTransaction消息
+
+note over Shard
+    shard内部将preCommit及其commit合并操作之后返回
+end note
+
+Shard --> ThreePhaseCommitCohortProxy: 返回CommitTransactionReply
+
+ThreePhaseCommitCohortProxy -> ConcurrentDOMDataBroker: return success
+
+end
+
+ThreePhaseCommitCohortProxy -> ConcurrentDOMDataBroker: 触发下一个cohort的doCommit
+
+end
+
+ConcurrentDOMDataBroker -> DOMBrokerWriteOnlyTransaction: 所有Cohort三阶段提交完成后返回执行结果的Future
+
+@enduml
+

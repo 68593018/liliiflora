@@ -1,0 +1,51 @@
+@startuml
+
+box "App" #LightYellow
+    participant App
+end box
+
+box "MD-SAL" #LightBlue
+    participant BindingDOMWriteTransactionAdapter
+    participant BindingToNormalizedNodeCodec
+end box
+
+box "Distribute DataStore" #DeepSkyBlue
+    participant DOMBrokerWriteOnlyTransaction
+    participant DistributedDataStore
+    participant TransactionProxy
+end box
+
+
+App -> BindingDOMWriteTransactionAdapter: writeTx.put(dsType, path, data)
+
+BindingDOMWriteTransactionAdapter -> BindingToNormalizedNodeCodec: toNormalizedNode(path, data)
+
+BindingToNormalizedNodeCodec -> BindingDOMWriteTransactionAdapter: 返回NormalizedNode
+
+note left
+     BA到BI数据格式转换
+     将path转换为YangInstanceIdentifier
+     将data转换为NormalizedNode
+end note
+
+BindingDOMWriteTransactionAdapter -> DOMBrokerWriteOnlyTransaction: put(store, path, data)
+
+DOMBrokerWriteOnlyTransaction -> DistributedDataStore: newWriteOnlyTransaction();
+
+note left
+     createTransaction(store)
+end note
+
+DistributedDataStore -> TransactionProxy: new TransactionProxy(TransactionContextFactory, TransactionType)
+
+note left
+     限速创建TransactionProxy
+end note
+
+TransactionProxy -> DistributedDataStore: 
+
+DistributedDataStore -> DOMBrokerWriteOnlyTransaction: 返回TransactionProxy实例proxy
+
+DOMBrokerWriteOnlyTransaction -> TransactionProxy: proxy.write(path, data)
+
+@enduml

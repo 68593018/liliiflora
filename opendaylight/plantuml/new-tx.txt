@@ -1,0 +1,40 @@
+@startuml
+
+box "App" #LightYellow
+    participant App
+end box
+
+box "MD-SAL" #LightBlue
+    participant BindingDOMDataBrokerAdapter
+end box
+
+box "Distribute DataStore" #DeepSkyBlue
+    participant ConcurrentDOMDataBroker
+    participant DOMBrokerWriteOnlyTransaction
+end box
+
+
+App -> BindingDOMDataBrokerAdapter: dataBroker.newWriteOnlyTransaction()
+
+BindingDOMDataBrokerAdapter -> ConcurrentDOMDataBroker: newWriteOnlyTransaction()
+
+ConcurrentDOMDataBroker -> DOMBrokerWriteOnlyTransaction: new DOMBrokerWriteOnlyTransaction(TxId, Stores, ConcurrentDOMDataBroker)
+
+
+DOMBrokerWriteOnlyTransaction -> ConcurrentDOMDataBroker: 返回delegateTx
+
+note right
+     创建DOMBrokerWriteOnlyTransaction实例delegateTx,
+     封装TxID, Store及其ConcurrentDOMDataBroker
+     Stores即代表DistributedDataStore
+end note
+
+ConcurrentDOMDataBroker -> BindingDOMDataBrokerAdapter: 返回delegateTx
+
+BindingDOMDataBrokerAdapter -> App: new BindingDOMWriteTransactionAdapter(delegateTx, codec)
+
+note right
+     创建读事务实例作为WriteTransaction返回
+end note
+
+@enduml

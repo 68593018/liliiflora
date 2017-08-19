@@ -1,0 +1,111 @@
+@startuml
+
+box "Leader-Node" #LightBlue
+	participant App
+	participant SingleCommitCohortProxy
+	participant LocalThreePhaseCommitCohort
+	participant LeaderShardThread
+
+end box
+
+box "Follower-Node" #LightYellow
+    participant FollowerShardThread
+end box
+
+group put
+App -> App: tx.put(type, data)
+
+note left
+     根据type及其data构造写入数据库的K/V信息
+     Key(YangInstanceIdentifier path)
+     Value(NormalizedNode<?, ?> data)
+end note
+end put
+
+group submit
+group TransactionProxy.Ready()
+App -> LeaderShardThread: doask(ReadyLocalTransaction)
+note left
+     通过Akka发送ReadyLocalTransaction消息
+end note
+
+LeaderShardThread -> LeaderShardThread: persistData()
+note left
+     persistData调用的是第三方接口
+end note
+
+LeaderShardThread -> FollowerShardThread: sendAppendEntries(ReplicatedLog)
+note left
+     persistData的apply回调中向follow发送AppendEntries
+end note
+
+group AppendEntries
+group applyState
+FollowerShardThread -> FollowerShardThread: 
+note right
+     向自己发送applyState消息，commit数据
+     根据AppendEntries写入ShardDataTree
+end note
+end group 
+
+group ApplyJournalEntries
+FollowerShardThread -> FollowerShardThread: 
+note right
+     向自己发送ApplyJournalEntries消息
+     根据ApplyJournalEntries进行持久化操作
+end note
+end group 
+end group
+
+FollowerShardThread -> LeaderShardThread: tell(AppendEntriesReply)
+note right
+     Follower节点处理完AppendEntries消息后
+     向Leader节点发送AppendEntriesReply消息
+end note
+
+group AppendEntriesReply
+LeaderShardThread -> LeaderShardThread
+note right
+     根据AppendEntriesReply消息内容
+     按照RAFT日志复制算法做一系列处理
+end note
+
+group applyLogToStateMachine
+
+LeaderShardThread -> LeaderShardThread: 
+note right
+     向自己发送applyState消息
+end note
+
+group applyState
+group finishCommit
+
+LeaderShardThread -> LeaderShardThread: 
+note right
+     根据AppendEntriesReply写入ShardDataTree
+end note
+
+LeaderShardThread -[#0000FF]-> LocalThreePhaseCommitCohort: tell(CommitTransactionReply)
+note right
+     通知事务提交完成，到这里shard整个流程已经终结
+end note
+
+end  
+end 
+end 
+
+
+group ApplyJournalEntries
+LeaderShardThread -> LeaderShardThread: 
+note right
+     向自己发送ApplyJournalEntries消息
+     根据ApplyJournalEntries进行持久化操作
+end note
+end  
+end 
+end 
+
+
+end 
+
+@enduml

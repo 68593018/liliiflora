@@ -1,0 +1,56 @@
+@startuml
+
+box "Distribute DataStore" #DeepSkyBlue
+    participant DOMBrokerWriteOnlyTransaction
+    participant ConcurrentDOMDataBroker
+    participant SingleCommitCohortProxy
+end box
+
+box "Akka System" #LightBlue
+    participant Shard
+end box
+
+DOMBrokerWriteOnlyTransaction -> ConcurrentDOMDataBroker: submit(tx, cohorts)
+
+group doCanCommit
+
+ConcurrentDOMDataBroker -> SingleCommitCohortProxy: canCommit()
+
+note over Shard
+    单shard情况下shard内部处理ReadyLocalTransaction直接进行三阶段提交
+end note
+
+Shard --> SingleCommitCohortProxy: ReadyLocalTransaction结果异步返回
+
+SingleCommitCohortProxy -> ConcurrentDOMDataBroker: canCommit由shard执行结果确定返回成功或者失败
+
+end
+
+group doPreCommit
+
+ConcurrentDOMDataBroker -> SingleCommitCohortProxy: preCommit()
+
+note over SingleCommitCohortProxy
+    不再与shard进行交互, 直接返回成功
+end note
+
+SingleCommitCohortProxy -> ConcurrentDOMDataBroker: return success
+
+end
+
+group doCommit
+
+ConcurrentDOMDataBroker -> SingleCommitCohortProxy: commit()
+
+note over SingleCommitCohortProxy
+    不再与shard进行交互, 直接返回成功
+end note
+
+SingleCommitCohortProxy -> ConcurrentDOMDataBroker: return success
+
+end
+
+ConcurrentDOMDataBroker -> DOMBrokerWriteOnlyTransaction: 返回执行结果的Future
+
+@enduml
+

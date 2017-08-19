@@ -1,0 +1,158 @@
+@startuml
+
+
+skinparam BoxPadding 10
+
+box "Distribute DataStore" #DeepSkyBlue
+    participant ActorContext
+    participant ShardDataTree
+    participant InMemoryDataTree
+end box
+
+box "Akka System" #LightBlue
+    participant Shard
+    participant ShardCommitCoordinator
+    participant SimpleShardDataTreeCohort
+end box
+
+ActorContext -> Shard: 发送ReadyLocalTransaction到shard
+
+note over ActorContext
+    ReadyLocalTransaction封装了Put产生
+    的InMemoryDataTreeModification
+end note
+
+Shard -> ShardCommitCoordinator: handleReadyLocalTransaction()
+
+
+
+ShardCommitCoordinator -> ShardDataTree: newReadyCohort(txId, mod)
+
+group createReadyCohort
+
+ShardDataTree -> SimpleShardDataTreeCohort: 创建ShardDataTreeCohort
+
+note over SimpleShardDataTreeCohort
+    实例化SimpleShardDataTreeCohort
+    封装dataTree, mod, txID
+    返回cohort
+end note
+
+SimpleShardDataTreeCohort -> ShardDataTree:
+
+ShardDataTree -> ShardDataTree: 将cohort加入pendingTransactions队列
+
+end
+
+ShardDataTree -> ShardCommitCoordinator: 返回cohort
+
+alt canCommit阶段
+
+ShardCommitCoordinator -> SimpleShardDataTreeCohort: canCommit()
+
+SimpleShardDataTreeCohort -> ShardDataTree: startCanCommit()
+
+note over InMemoryDataTree
+    从pendingTransactions队列里面
+    取出cohort进行canCommit
+end note
+
+ShardDataTree -> InMemoryDataTree: tip.validate(modification)
+
+note over InMemoryDataTree
+    validate主要做合法性检查
+    例如乐观锁冲突的判断
+end note
+
+InMemoryDataTree -> ShardDataTree: 
+
+ShardDataTree -> SimpleShardDataTreeCohort: successfulCanCommit()
+
+SimpleShardDataTreeCohort -> ShardCommitCoordinator: onSuccess()
+
+
+else 等待外部协调者触发canCommit阶段
+
+ShardCommitCoordinator -> ActorContext: tell ReadyTransactionReply
+
+end
+
+group preCommit阶段
+
+ShardCommitCoordinator -> SimpleShardDataTreeCohort: preCommit()
+
+SimpleShardDataTreeCohort -> ShardDataTree: startPreCommit()
+
+note over InMemoryDataTree
+    prepare则是将modification应用到当前
+    的数据库上,但是还未做commit确认
+    将cohort从pendingTransactions移动到
+    pendingCommits队列
+end note
+
+ShardDataTree -> InMemoryDataTree: tip.prepare(modification)
+
+note over InMemoryDataTree
+    prepare结果保存到candidate
+end note
+
+InMemoryDataTree -> ShardDataTree: 
+
+ShardDataTree -> SimpleShardDataTreeCohort: successfulPreCommit()
+
+SimpleShardDataTreeCohort -> ShardCommitCoordinator: onSuccess()
+
+end
+
+group doCommit阶段
+
+ShardCommitCoordinator -> SimpleShardDataTreeCohort: commit()
+
+SimpleShardDataTreeCohort -> ShardDataTree: startCommit()
+
+note over ShardDataTree
+    将cohort从pendingCommits队列
+    移动到pendingFinishCommits
+end note
+
+note over ShardDataTree
+    将candidate转换为CommitTransactionPayload
+    进行持久化处理
+end note
+
+ShardDataTree -> Shard: shard.persistPayload(txId, payload)
+
+note right: payload作为Journary写入LevelDb
+
+Shard --> ShardDataTree: payloadReplicationComplete(txId)
+
+note over ShardDataTree
+    从pendingFinishCommits取出cohort
+end note
+
+group finishCommit阶段
+
+ShardDataTree -> InMemoryDataTree: commit(candidate)
+
+note right: 最终的commit操作, 数据库更改成功
+
+InMemoryDataTree -> ShardDataTree:
+
+ShardDataTree -> SimpleShardDataTreeCohort: successfulCommit()
+
+SimpleShardDataTreeCohort -> ShardCommitCoordinator: onSuccess()
+
+note over ShardDataTree
+    返回给业务本次事务执行成功
+end note
+
+ShardCommitCoordinator -> ActorContext: tell CommitTransactionReply
+
+
+end
+
+end
+
+
+
+@enduml

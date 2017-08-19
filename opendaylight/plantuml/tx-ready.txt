@@ -1,0 +1,123 @@
+@startuml
+
+box "Distribute DataStore" #DeepSkyBlue
+    participant BindingDOMWriteTransactionAdapter
+    participant DOMBrokerWriteOnlyTransaction
+    participant TransactionProxy
+    participant LocalTransactionContext
+    participant LocalTransactionFactoryImpl
+    participant SnapshotBackedWriteTransaction
+    participant InMemoryDataTreeModification
+    participant LocalThreePhaseCommitCohort
+end box
+
+box "Akka System" #LightBlue
+    participant Shard
+end box
+
+BindingDOMWriteTransactionAdapter -> DOMBrokerWriteOnlyTransaction: submit()
+
+note over BindingDOMWriteTransactionAdapter
+    这里的cohorts区分operational及其config数据库
+end note
+
+DOMBrokerWriteOnlyTransaction -> TransactionProxy: txn.ready()
+
+alt Single Shard
+
+group createSingleCommitCohort
+
+TransactionProxy -> LocalTransactionContext: directCommit()
+
+LocalTransactionContext -> LocalTransactionFactoryImpl: onTransactionReady(tx, operationError)
+
+LocalTransactionFactoryImpl -> SnapshotBackedWriteTransaction: ready()
+
+SnapshotBackedWriteTransaction -> InMemoryDataTreeModification: ready()
+
+InMemoryDataTreeModification -> SnapshotBackedWriteTransaction
+
+SnapshotBackedWriteTransaction -> LocalTransactionFactoryImpl: transactionReady(tx, tree)
+
+LocalTransactionFactoryImpl -> SnapshotBackedWriteTransaction: new LocalThreePhaseCommitCohort()
+
+note over SnapshotBackedWriteTransaction
+    cohort = new LocalThreePhaseCommitCohort(actorContext, leader, tx, tree)
+end note
+
+SnapshotBackedWriteTransaction -> LocalTransactionFactoryImpl: return cohort
+
+LocalTransactionFactoryImpl -> LocalTransactionContext: return cohort
+
+LocalTransactionContext -> LocalThreePhaseCommitCohort: initiateDirectCommit()  
+
+
+group initiateCommit
+
+note over LocalThreePhaseCommitCohort
+    因为该事务仅涉及单shard
+    ReadyLocalTransaction消息里面doCommitOnReady字段为True
+    直接进行commit
+end note
+
+LocalThreePhaseCommitCohort -> Shard: tell ReadyLocalTransaction
+
+end
+
+Shard --> TransactionProxy: Shard执行后异步返回一个Future
+
+TransactionProxy -> DOMBrokerWriteOnlyTransaction: new SingleCommitCohortProxy(Future)
+
+end
+
+else Multi shard
+
+group createMultiCommitCohort
+
+loop 
+
+TransactionProxy -> LocalTransactionContext: readyTransaction()
+
+LocalTransactionContext -> LocalThreePhaseCommitCohort: initiateCoordinatedCommit()
+
+group initiateCommit
+
+note over LocalThreePhaseCommitCohort
+    因为该事务仅涉及多个shard
+    ReadyLocalTransaction消息里面doCommitOnReady字段为False 
+    需要通过Cohorts协调进行三阶段提交处理
+end note
+
+LocalThreePhaseCommitCohort -> Shard: tell ReadyLocalTransaction
+
+end
+
+Shard --> TransactionProxy: Shard执行后异步返回一个Future
+
+note over LocalThreePhaseCommitCohort
+    将每个shard返回的Future封装进CohortInfo
+    添加到cohorts队列中
+    这里的cohorts则表示在某种类型数据库下的shard数目
+end note
+
+TransactionProxy -> TransactionProxy: cohorts.add(CohortInfo(Future))
+
+
+end
+
+note over DOMBrokerWriteOnlyTransaction
+    cohorts封装了每个shard返回的Future
+end note
+
+TransactionProxy -> DOMBrokerWriteOnlyTransaction: new ThreePhaseCommitCohortProxy(cohorts) 
+
+end
+
+end
+
+note over DOMBrokerWriteOnlyTransaction
+    cohorts构造完成后，这里开始真正进入submit流程
+end note
+
+@enduml
+
