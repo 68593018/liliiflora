@@ -1,0 +1,38 @@
+module people {
+    yang-version 1;
+    namespace "urn:opendaylight:etdstore:people";
+    prefix "people";
+
+    revision "2014-03-13" {
+        description "Initial revision.";
+    }
+
+    container peoples {
+        presence "expected to exist when empty";
+        list person {
+            key name;
+            leaf name {
+                type string;
+            }
+
+            leaf age {
+                type uint32;
+            }
+
+            list car {
+                key brand;
+                leaf brand {
+                    type string;
+                }
+
+                leaf price {
+                    type uint64;
+                }
+            }
+
+            leaf-list nationality {
+                type string;
+            }
+        }
+    }
+}
