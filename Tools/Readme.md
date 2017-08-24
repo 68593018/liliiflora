@@ -23,6 +23,7 @@
 + npm设置 : http://blog.csdn.net/h416756139/article/details/50791188
 + 在线前端开发平台 Plunker : http://plnkr.co/
 + REST-API : https://swagger.io/
++ OSGI blueprint: http://www.eclipse.org/gemini/blueprint/documentation/reference/2.1.0.RELEASE/html/index.html
 + JavaScript UI:
     - https://vmware.github.io/clarity/  
     - http://www.jqwidgets.com/angular/  商业软件  
