@@ -1,0 +1,91 @@
+@startuml
+
+box "Leader Node" #DeepSkyBlue
+    participant Shard1
+    participant ReplicatedLogImpl
+    participant PersistentDataProvider
+    participant ShardDataTree
+    participant InMemoryDataTree
+    participant SimpleShardDataTreeCohort
+    participant ShardCommitCoordinator
+    participant ActorContext
+    participant Leader
+end box
+
+box "Follower Node" #LightBlue
+    participant Follower
+end box
+
+-> Shard1: persistData(id, payload)
+
+Shard1 -> ReplicatedLogImpl: appendAndPersist(ReplicatedLogEntry)
+
+note over PersistentDataProvider
+    将payload封装进ReplicatedLogEntry
+    ReplicatedLogEntry作为日志进行持久化
+end note
+
+ReplicatedLogImpl -> PersistentDataProvider: persist(replicatedLogEntry, persistCallback)
+
+PersistentDataProvider --> Shard1: callback
+
+alt single-Node
+
+group handleApplyState 处理ApplyState消息
+
+group applyState
+Shard1 -> ShardDataTree: applyReplicatedPayload(id, payload)
+group payloadReplicationComplete
+group finishCommit阶段
+
+ShardDataTree -> InMemoryDataTree: commit(candidate)
+
+note right: 最终的commit操作, 数据库更改成功
+
+InMemoryDataTree -> ShardDataTree:
+
+ShardDataTree -> SimpleShardDataTreeCohort: successfulCommit()
+
+SimpleShardDataTreeCohort -> ShardCommitCoordinator: onSuccess()
+
+note over ShardCommitCoordinator
+    返回给业务本次事务执行成功
+end note
+
+ShardCommitCoordinator -> ActorContext: tell CommitTransactionReply
+
+
+end
+end
+
+ShardDataTree -> Shard1
+
+end
+end
+
+Shard1 -> Shard1: 向自己发送ApplyJournalEntries消息
+
+Shard1 -> PersistentDataProvider: persist(applyEntries)
+
+note over PersistentDataProvider
+    将ApplyJournalEntries消息进行持久化
+end note
+
+else multi-Nodes
+
+Shard1 -> Leader: replicate(Replicate)
+
+loop 循环所有分片副本的Follower
+
+group sendAppendEntries
+
+Leader -> Follower: 发送AppendEntries消息到Follower
+
+end
+end
+
+end
+
+
+@enduml
+

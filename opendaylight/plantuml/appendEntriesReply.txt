@@ -1,0 +1,95 @@
+@startuml
+
+box "Leader Node" #DeepSkyBlue
+    participant Leader
+    participant RaftActorContextImpl
+    participant Shard
+    participant ShardDataTree
+    participant InMemoryDataTree
+    participant SimpleShardDataTreeCohort
+    participant ShardCommitCoordinator
+    participant PersistentDataProvider
+    participant ActorContext
+end box
+
+box "Follower Node" #LightBlue
+    participant Follower
+end box
+
+Follower -> Leader: 发送AppendEntriesReply消息
+
+group handleAppendEntriesReply
+
+note over Leader
+    通过Raft算法判断Leader与
+    Follower之间Log信息是否一致
+end note
+
+Leader -> Leader: 解析AppendEntriesReply消息
+
+group possiblyUpdateCommitIndex
+
+note over Leader
+    从上次commitIndex开始遍历每一条log
+    记录log信息被多少Follower处理过
+    然后根据Raft多数一致性算法进行commit
+end note
+
+Leader -> Leader: 根据Raft多数一致算法判断是否可以commit
+
+group applyLogToStateMachine
+
+Leader -> Shard: handleApplyState
+
+group handleApplyState 处理ApplyState消息
+
+group applyState
+Shard -> ShardDataTree: applyReplicatedPayload(id, payload)
+group payloadReplicationComplete
+group finishCommit阶段
+
+ShardDataTree -> InMemoryDataTree: commit(candidate)
+
+note right: 最终的commit操作, 数据库更改成功
+
+InMemoryDataTree -> ShardDataTree:
+
+ShardDataTree -> SimpleShardDataTreeCohort: successfulCommit()
+
+SimpleShardDataTreeCohort -> ShardCommitCoordinator: onSuccess()
+
+note over ShardCommitCoordinator
+    返回给业务本次事务执行成功
+end note
+
+ShardCommitCoordinator -> ActorContext: tell CommitTransactionReply
+
+
+end
+end
+
+ShardDataTree -> Shard
+
+end
+end
+
+
+end
+
+Shard -> Shard: 向自己发送ApplyJournalEntries消息
+
+Shard -> PersistentDataProvider: persist(applyEntries)
+
+PersistentDataProvider -> Shard
+
+note over PersistentDataProvider
+    将ApplyJournalEntries消息进行持久化
+end note
+
+end
+
+Leader -> Follower: 发送后续的AppendEntries消息到Follower
+
+Follower -> Leader: 回应AppendEntriesReply进入下一轮处理
+
+@enduml

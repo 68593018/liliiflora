@@ -1,0 +1,53 @@
+@startuml
+
+box "Leader Node" #DeepSkyBlue
+    participant Leader
+end box
+
+
+box "Follower Node" #LightBlue
+    participant AbstractRaftActorBehavior
+    participant Follower
+    participant ReplicatedLogImpl
+    participant DataPersistenceProvider
+    participant Shard
+end box
+
+
+AbstractRaftActorBehavior -> Follower: handleAppendEntries(AppendEntries)
+
+Follower -> Follower: isOutOfSync()
+note right
+    根据leader发送的AppendEntries
+    判断ReplicatedLogEntry是否乱序
+end note
+
+
+Follower -> ReplicatedLogImpl: appendAndPersist()
+note right
+     遍历AppendEntries, 获取需要的ReplicatedLogEntry进行持久化
+end note
+
+ReplicatedLogImpl -> DataPersistenceProvider: persist()
+note right
+     调用第三方接口进行持久化
+end note
+DataPersistenceProvider --> ReplicatedLogImpl: 
+
+ReplicatedLogImpl --> Follower:
+
+Follower -> AbstractRaftActorBehavior: applyLogToStateMachine()
+
+AbstractRaftActorBehavior -> Shard: tell(ApplyState(ReplicatedLog))
+
+AbstractRaftActorBehavior -> Shard: tell(ApplyJournalEntries)
+
+AbstractRaftActorBehavior --> Follower:
+
+Follower -> Leader: tell(AppendEntriesReply)
+note right
+     Follower向Leader发送AppendEntriesReply响应
+end note
+
+
+@enduml
