@@ -33,3 +33,7 @@
     - http://www.ielts-mentor.com/
     - http://www.ieltsbuddy.com/
 + MAVEN常用命令: http://yanan0628.iteye.com/blog/2270344
++ 分布式相关:
+    - http://www.jianshu.com/p/b46728051f51
+    - https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Architecture:Clustering:2-Node
+    - https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Architecture:Clustering
