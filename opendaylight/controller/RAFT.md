@@ -2,6 +2,15 @@
 
 ## RaftState
 
+### Candidate
+
+### Follower
+
+### Leader
+
+### IsolatedLeader
+
+### PreLeader
 
 ## ShardInformation
 
