@@ -26,6 +26,7 @@
 + OSGI blueprint: http://www.eclipse.org/gemini/blueprint/documentation/reference/2.1.0.RELEASE/html/index.html
 + akka监控: https://github.com/hustnn/akka-mon
 + LightBend: https://developer.lightbend.com/docs/cinnamon/latest/home.html
++ jolokia: http://www.cnblogs.com/davidwang456/p/6482840.html
 + JavaScript UI:
     - https://vmware.github.io/clarity/  
     - http://www.jqwidgets.com/angular/  商业软件  
