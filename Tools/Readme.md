@@ -24,6 +24,7 @@
 + 在线前端开发平台 Plunker : http://plnkr.co/
 + REST-API : https://swagger.io/
 + OSGI blueprint: http://www.eclipse.org/gemini/blueprint/documentation/reference/2.1.0.RELEASE/html/index.html
++ akka监控: https://github.com/hustnn/akka-mon
 + JavaScript UI:
     - https://vmware.github.io/clarity/  
     - http://www.jqwidgets.com/angular/  商业软件  
