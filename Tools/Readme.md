@@ -28,6 +28,7 @@
 + LightBend: https://developer.lightbend.com/docs/cinnamon/latest/home.html
 + jolokia: http://www.cnblogs.com/davidwang456/p/6482840.html
 + jolokia-web: https://github.com/wwfdoink/jolokia-web
++ jolokia-python: https://pypi.python.org/pypi/pyjolokia
 + JavaScript UI:
     - https://vmware.github.io/clarity/  
     - http://www.jqwidgets.com/angular/  商业软件  
