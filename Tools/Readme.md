@@ -25,6 +25,7 @@
 + REST-API : https://swagger.io/
 + OSGI blueprint: http://www.eclipse.org/gemini/blueprint/documentation/reference/2.1.0.RELEASE/html/index.html
 + akka监控: https://github.com/hustnn/akka-mon
++ JVM监控: http://kamon.io/documentation/get-started/
 + LightBend: https://developer.lightbend.com/docs/cinnamon/latest/home.html
 + jolokia: http://www.cnblogs.com/davidwang456/p/6482840.html
 + jolokia-web: https://github.com/wwfdoink/jolokia-web
