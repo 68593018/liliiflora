@@ -44,3 +44,5 @@
     - https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Architecture:Clustering:2-Node
     - https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL:Architecture:Clustering
     - https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed%20
++ Quant:
+    - http://quantlib.org/index.shtml
