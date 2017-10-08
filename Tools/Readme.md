@@ -46,5 +46,6 @@
     - https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed%20
 + Quant:
     - http://quantlib.org/index.shtml
+    - https://github.com/foodish/learning_notebook
 + Git:
     - https://git-scm.com/docs
