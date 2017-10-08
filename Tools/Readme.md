@@ -47,5 +47,6 @@
 + Quant:
     - http://quantlib.org/index.shtml
     - https://github.com/foodish/learning_notebook
+    - https://github.com/Travis-Sun/WiKi/blob/master/draft/DataAnalysis/economyLift_info
 + Git:
     - https://git-scm.com/docs
