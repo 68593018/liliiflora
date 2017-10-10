@@ -39,7 +39,7 @@
     - http://www.ielts-mentor.com/
     - http://www.ieltsbuddy.com/
     - https://ieltsintaiwan.wordpress.com/task-1/
-    - http://ieltsliz.com/ielts-writing-task-1-lessons-and-tips/
+    - http://ieltsliz.com/ielts-writing-task-1-lessons-and-tips/
     - https://www.ieltsadvantage.com/2015/05/13/ielts-task-1-overview/
 + MAVEN常用命令: http://yanan0628.iteye.com/blog/2270344
 + 分布式相关:
