@@ -53,3 +53,5 @@
     - https://github.com/Travis-Sun/WiKi/blob/master/draft/DataAnalysis/economyLift_info
 + Git:
     - https://git-scm.com/docs
++ SDx:
+    - https://www.sdxcentral.com/reports/2017/nfv-infrastructure-vim/?c_action=sidebar
