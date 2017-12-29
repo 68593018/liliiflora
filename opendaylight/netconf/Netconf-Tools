@@ -1,0 +1,137 @@
+Controller作为Client，支持NetConf的物理设备作为Services, Controller主动连接物理设备
+
+netconf-node-topology.yang
+
+
+测试工具:
+
+
+GET http://10.42.88.26:8181/restconf/config/network-topology:network-topology/
+
+#增加一个netconf设备节点
+
+PUT http://10.42.88.26:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/test1
+
+<node xmlns="urn:TBD:params:xml:ns:yang:network-topology">
+   <node-id>test1</node-id>
+   <host xmlns="urn:opendaylight:netconf-node-topology">10.42.197.157(windows机器)</host>
+   <port xmlns="urn:opendaylight:netconf-node-topology">17831</port>
+   <username xmlns="urn:opendaylight:netconf-node-topology">admin</username>
+   <password xmlns="urn:opendaylight:netconf-node-topology">admin</password>
+   <tcp-only xmlns="urn:opendaylight:netconf-node-topology">false</tcp-only>
+   <keepalive-delay xmlns="urn:opendaylight:netconf-node-topology">0</keepalive-delay>  
+   <reconnect-on-changed-schema xmlns="urn:opendaylight:netconf-node-topology">true</reconnect-on-changed-schema>
+ </node>
+
+#测试工具的schema文件夹和ODL控制器的schema文件夹中具有相同的yang文件则表示双方均具备此能力，例如test@2014-10-18.yang文件
+
+#控制器和设备协商后，可以通过操作库查询相应协商能力
+GET http://10.42.88.26:8181/restconf/operational/network-topology:network-topology/topology/topology-netconf/
+
+<topologyxmlns="urn:TBD:params:xml:ns:yang:network-topology">
+<topology-id>topology-netconf</topology-id>
+<node>
+<node-id>test0</node-id>
+<available-capabilitiesxmlns="urn:opendaylight:netconf-node-topology">
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>
+<capability>(urn:opendaylight:test:netconf:crud?revision=2014-10-18)test</capability>
+<capability-origin>device-advertised</capability-origin>
+</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+<available-capability>…</available-capability>
+</available-capabilities>
+<hostxmlns="urn:opendaylight:netconf-node-topology">10.42.197.157</host>
+<unavailable-capabilitiesxmlns="urn:opendaylight:netconf-node-topology"/>
+<connection-statusxmlns="urn:opendaylight:netconf-node-topology">connected</connection-status>
+<portxmlns="urn:opendaylight:netconf-node-topology">17830</port>
+</node>
+<node>…</node>
+<node>…</node>
+</topology>
+
+#可以根据test@2014-10-18.yang通过netconf进行配置下发到设备
+
+POST http://10.42.88.26:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/test2/yang-ext:mount/
+
+<cont xmlns="urn:opendaylight:test:netconf:crud"><l>Content Test2</l></cont>
+
+#查看POST的数据是否成功
+
+GET http://10.42.88.26:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/test2/yang-ext:mount/
+
+<dataxmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<contxmlns="urn:opendaylight:test:netconf:crud">
+<l>Content Test2</l>
+</cont>
+</data>
+
+#删除刚刚下发的test数据
+
+DELETE http://10.42.88.26:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/test2/yang-ext:mount/test:cont
+
+
+# NetconfClientSession
+#netty session down调用栈
+
+"nioEventLoopGroupCloseable-3-6@18372" prio=10 tid=0x192b nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+          at org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceTopologyAdapter.updateDeviceData(NetconfDeviceTopologyAdapter.java:102)
+          at org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceSalFacade.onDeviceDisconnected(NetconfDeviceSalFacade.java:69)
+          - locked <0x47c6> (a org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceSalFacade)
+          at org.opendaylight.netconf.sal.connect.netconf.sal.KeepaliveSalFacade.onDeviceDisconnected(KeepaliveSalFacade.java:146)
+          at org.opendaylight.netconf.sal.connect.netconf.NetconfDevice.onRemoteSessionDown(NetconfDevice.java:275)
+          at org.opendaylight.netconf.sal.connect.netconf.listener.NetconfDeviceCommunicator.tearDown(NetconfDeviceCommunicator.java:201)
+          at org.opendaylight.netconf.sal.connect.netconf.listener.NetconfDeviceCommunicator.onSessionDown(NetconfDeviceCommunicator.java:236)
+          at org.opendaylight.netconf.sal.connect.netconf.listener.NetconfDeviceCommunicator.onSessionDown(NetconfDeviceCommunicator.java:48)
+          at org.opendaylight.netconf.nettyutil.AbstractNetconfSession.endOfInput(AbstractNetconfSession.java:108)
+          at org.opendaylight.protocol.framework.AbstractProtocolSession.channelInactive(AbstractProtocolSession.java:40)
+          at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:246)
+          at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:232)
+          at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:225)
+          at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:360)
+          at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:325)
+          at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:246)
+          at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:232)
+          at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:225)
+          at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:360)
+          at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:325)
+          at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:246)
+          at io.netty.channel.AbstractChannelHandlerContext.access$300(AbstractChannelHandlerContext.java:38)
+          at io.netty.channel.AbstractChannelHandlerContext$4.run(AbstractChannelHandlerContext.java:237)
+          at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+          at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:403)
+          at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:445)
+          at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
+          at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+          at java.lang.Thread.run(Thread.java:745)
+
+# netconf device 重启后重新上线记录
+
+"remote-connector-processing-executor-23@18794" prio=10 tid=0x2014 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+          at org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceTopologyAdapter.updateDeviceData(NetconfDeviceTopologyAdapter.java:102)
+          at org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceSalFacade.onDeviceConnected(NetconfDeviceSalFacade.java:64)
+          - locked <0x496e> (a org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceSalFacade)
+          at org.opendaylight.netconf.sal.connect.netconf.sal.NetconfDeviceSalFacade.onDeviceConnected(NetconfDeviceSalFacade.java:26)
+          at org.opendaylight.netconf.sal.connect.netconf.sal.KeepaliveSalFacade.onDeviceConnected(KeepaliveSalFacade.java:131)
+          at org.opendaylight.netconf.sal.connect.netconf.sal.KeepaliveSalFacade.onDeviceConnected(KeepaliveSalFacade.java:47)
+          at org.opendaylight.netconf.sal.connect.netconf.NetconfDevice.handleSalInitializationSuccess(NetconfDevice.java:229)
+          - locked <0x4970> (a org.opendaylight.netconf.sal.connect.netconf.NetconfDevice)
+          at org.opendaylight.netconf.sal.connect.netconf.NetconfDevice.access$500(NetconfDevice.java:78)
+          at org.opendaylight.netconf.sal.connect.netconf.NetconfDevice$SchemaSetup.setUpSchema(NetconfDevice.java:507)
+          at org.opendaylight.netconf.sal.connect.netconf.NetconfDevice$SchemaSetup.run(NetconfDevice.java:466)
+          at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+          at com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask.runInterruptibly(TrustedListenableFutureTask.java:111)
+          at com.google.common.util.concurrent.InterruptibleTask.run(InterruptibleTask.java:58)
+          at com.google.common.util.concurrent.TrustedListenableFutureTask.run(TrustedListenableFutureTask.java:75)
+          at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+          at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+          at java.lang.Thread.run(Thread.java:745)
