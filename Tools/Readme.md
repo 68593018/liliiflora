@@ -57,3 +57,5 @@
     - https://git-scm.com/docs
 + SDx:
     - https://www.sdxcentral.com/reports/2017/nfv-infrastructure-vim/?c_action=sidebar
++ ddd"
+    - https://github.com/binhnguyennus/designing-data-intensive-applications
