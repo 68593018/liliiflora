@@ -32,6 +32,7 @@
 + jolokia: http://www.cnblogs.com/davidwang456/p/6482840.html
 + jolokia-web: https://github.com/wwfdoink/jolokia-web
 + jolokia-python: https://pypi.python.org/pypi/pyjolokia
++ JAVAGC: http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html#overview
 + JavaScript UI:
     - https://vmware.github.io/clarity/  
     - http://www.jqwidgets.com/angular/  商业软件  
