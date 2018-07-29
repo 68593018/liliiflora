@@ -1,0 +1,90 @@
+@startuml
+
+title EntityOwnerShip消息交互
+
+== 注册Entity监听 ==
+
+TopologyRoleChangeStrategy -> DistributedEntityOwnershipService: registerListener("topology-netconf")
+
+DistributedEntityOwnershipService -> EntityOwnershipShard: tell RegisterListenerLocal
+
+EntityOwnershipShard -> EntityOwnershipListenerSupport: addEntityOwnershipListener
+
+EntityOwnershipListenerSupport -> EntityOwnershipListenerActor: new EntityOwnershipListenerActor
+
+EntityOwnershipListenerActor -> EntityOwnershipListenerSupport:
+
+EntityOwnershipListenerSupport -> EntityOwnershipShard:
+
+EntityOwnershipShard -> DataStore: Read Entity Owner Info
+
+DataStore -> EntityOwnershipShard: Return Query Result
+
+EntityOwnershipShard -> EntityOwnershipListenerSupport: notifyEntityOwnershipListener
+
+EntityOwnershipListenerSupport -> EntityOwnershipListenerActor: tell EntityOwnershipChange
+
+EntityOwnershipListenerActor -> TopologyRoleChangeStrategy: ownershipChanged
+
+
+== 注册Entity ==
+
+TopologyRoleChangeStrategy -> DistributedEntityOwnershipService: registerCandidate("topology-netconf", "topology-manager")
+
+DistributedEntityOwnershipService -> EntityOwnershipShard: tell RegisterCandidateLocal
+
+EntityOwnershipShard -> DataStore: Write Entity  
+
+DataStore -> CandidateListChangeListener: onDataTreeChanged
+
+CandidateListChangeListener -> EntityOwnershipShard: tell CandidateAdded
+
+EntityOwnershipShard -> EntityOwnershipShard: Select New Owner
+
+note left: Trigger Select New Owner Only In Leader
+
+== 写入新的owner触发变更通知 ==
+
+EntityOwnershipShard -> DataStore: Write Entity New Owner
+
+DataStore -> EntityOwnerChangeListener: onDataTreeChanged
+
+EntityOwnerChangeListener -> EntityOwnershipListenerSupport: notifyEntityOwnershipListeners
+
+EntityOwnershipListenerSupport -> EntityOwnershipListenerActor: tell EntityOwnershipChange
+
+EntityOwnershipListenerActor -> TopologyRoleChangeStrategy: ownershipChanged
+
+== PeerDown ==
+
+AkkaClusterManager -> EntityOwnershipShard: tell PeerDown
+
+EntityOwnershipShard -> EntityOwnershipShard: Add To downPeerMemberNames
+
+EntityOwnershipShard -> DataStore: Delete Entity
+
+note left: Trigger Delete If Only In Leader And Down Peer Is Owner
+
+DataStore -> CandidateListChangeListener: onDataTreeChanged
+
+CandidateListChangeListener -> EntityOwnershipShard: tell CandidateRemoved
+
+EntityOwnershipShard -> EntityOwnershipShard: Select New Owner
+
+note left: Trigger Select New Owner Only In Leader
+
+== PeerUp ==
+
+AkkaClusterManager -> EntityOwnershipShard: tell PeerUp
+
+EntityOwnershipShard -> EntityOwnershipShard: Remove From downPeerMemberNames
+
+
+== 注销Entity ==
+
+
+== 状态显示 ==
+
+
+
+@enduml
